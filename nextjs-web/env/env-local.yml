@@ -1,0 +1,23 @@
+## @File        : env-**.yml
+## @Author      : 정재백
+## @Since       : 2024-04-16 
+## @Description : 환경설정파일
+## @Site        : https://devlog.ntiple.com/795
+
+app:
+  ## 프로파일 local / dev /prod 등 상황에 따라 작성한다
+  profile: 'local'
+  basePath: ''
+api:
+  ## API 자바서버 주소 reverse-proxy 로 작동하므로 localhost 로 작성해도 된다.
+  base: '/api'
+  alter: '/api'
+  server: 'http://localhost:8080'
+  timeout: 10000
+security:
+  key:
+    ## 페이지 적재후 API 와 키교환을 위한 RSA 암호화 키
+    rsa: 'MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMhfVP50PfMYry6YsMYpEdTPjWRHflvUNDhzhrgyO5gEiTIj2lK6S95XRggsU/NGTbRqRouBmFlV4+KHL9LLKhXszqlDRDWf1jZJBNdI4/GpRlQU/MkByji+2lv9894gJPXpExDLO/bM+PTZ16HMAMyZJ6DNw5hD/GMEudZk6U1lAgMBAAECgYAD/17nOrN3s6DfGZ3BPlWEPOXRv9lmBJxMGgXwi9QDiuefz/ZNmzjjRTN4+0Vrf5YSSOKCawH6mkuTG+ZY2sPKpiIBSX4SXewMIKRhbxOj19iwrNp1gBDK3s/kpHy9+x8b7tuEIITNYreuadYAvVgSMlaJVPdh7uUm39sMnn/aqwJBANRWQBpaOfw3iQ+g7jBrBJz+e5QbmsNZeNUPrk9WbMuhKQkLUP2E4U5noFKV8SZFGo48YPKsC32DxFF3e8kw2fsCQQDxk0ALLlepzdpqVkm6YQ4KtTEweug+L/RdjU5apGZLZI+AGfYIE1JIzyzgdPke92ePnw1wPqFgi0PyzyJn8DgfAkAq5M2IRUfHapSWgqT7RPMmn8XpEnZ+Ffnx2HwW7NeHfyPh/tY6kHhPNWHOrRmM6JLHvuy6uQSNM2waJO/toZ+3AkEAo4WzUl46RNztPhHOsnTEFod0Fob78ixv02u1YDHsdJhLcsEgA3NgvZxPmlhT0ZxS46scY6BhiIJ8qj1/4q9+rQJAbZj4vsQB5SrKcYNR8VVYMP9EYXnFax66QgSjGI3zPJhjAcbdyhDVshFKHcsI3R1dxegLFTbvjYKejzWfHBcBUQ=='
+log:
+  ## 기본 로그레벨, info, warn 등 상위레벨로 수정시 콘솔 출력이 사라진다
+  level: 'debug'

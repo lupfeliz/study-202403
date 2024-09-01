@@ -11,7 +11,7 @@
 
 - `gradlew bootRun` 명령으로 실행한다
 
-```cmd
+```bash
 > gradlew bootRun
 
 - Configure project :
