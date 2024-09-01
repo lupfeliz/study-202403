@@ -7,23 +7,27 @@
  * @Site        : https://devlog.ntiple.com/795
  **/
 import app from '@/libs/app-context'
-import { Button } from '@/components'
+import { Button, Container } from '@/components'
 
 export default app.definePage((props) => {
   return (
-  <>
-  <div>
-    <h1>
-      INDEX PAGE
-    </h1>
+  <Container>
+    <section className='title'>
+      <h2>INDEX PAGE</h2>
+    </section>
+    <hr/>
     <section>
       <Button
         href='/smp/smp01001s01'
         >
-        SAMPLE
+        컴포넌트샘플
+      </Button>
+      <Button
+        href='/smp/smp01001s02'
+        >
+        통신샘플
       </Button>
     </section>
-  </div>
-  </>
+  </Container>
   )
 })
