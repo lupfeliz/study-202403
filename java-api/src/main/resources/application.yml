@@ -37,6 +37,8 @@ spring:
         ddl-auto: update
         format-sql: false
     mapping-resources:
+      - mappings/orm-article.xml
+      - mappings/orm-common.xml
   ## H2 Console 설정
   h2:
     console:

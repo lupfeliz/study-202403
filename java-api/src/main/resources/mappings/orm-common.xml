@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@File        : orm-common.xml
+@Author      : 정재백
+@Since       : 2024-04-16 
+@Description : 공통사용 JPA ORM
+@Site        : https://devlog.ntiple.com/795
+-->
+<entity-mappings 
+  xmlns="http://java.sun.com/xml/ns/persistence/orm"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
+  version="2.0">
+  <package>my.was.mywas.works.cmn</package>
+  <named-native-query name="Common.dbEncrypt">
+    <query>
+    <![CDATA[
+    SELECT RAWTOHEX(HASH('SHA256', :value, 1000))
+    ]]>
+    </query>
+  </named-native-query>
+</entity-mappings>

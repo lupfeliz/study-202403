@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 
+@File        : orm-article.xml
+@Author      : 정재백
+@Since       : 2024-04-16 
+@Description : 공통사용 JPA ORM
+@Site        : https://devlog.ntiple.com/795
+-->
+<entity-mappings 
+  xmlns="http://java.sun.com/xml/ns/persistence/orm"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://java.sun.com/xml/ns/persistence/orm http://java.sun.com/xml/ns/persistence/orm_2_0.xsd"
+  version="2.0">
+  <package>my.was.mywas.works.atc</package>
+  <!-- JPQL 질의 -->
+  <named-query name="Article.searchArticles">
+    <query>
+    <![CDATA[
+    select
+      new Article(id, boardId, num, title, userId, userNm, '', ctime, utime)
+    from
+      Article atc
+    where
+      (:searchType is not null or true) and
+      (:searchType != '1' or title like '%' || :keyword || '%') and
+      (:searchType != '2' or contents like '%' || :keyword || '%') and
+      (:searchType != '3' or (
+        title like '%' || :keyword || '%' or
+        contents like '%' || :keyword || '%'
+      ))
+    order by
+      (case when :orderType = '1' then utime else null end) asc,
+      (case when :orderType = '2' then utime else null end) desc,
+      (case when :orderType = '3' then title else null end) asc,
+      (case when :orderType = '4' then title else null end) desc,
+      (case when :orderType = '5' then id else null end) asc,
+      atc.id desc
+    ]]>
+    </query>
+  </named-query>
+  <named-query name="Article.countArticles">
+    <query>
+    <![CDATA[
+    select
+      count(atc)
+    from
+      Article atc
+    where
+      (:searchType is not null or true) and
+      (:searchType != '1' or title like '%' || :keyword || '%') and
+      (:searchType != '2' or contents like '%' || :keyword || '%') and
+      (:searchType != '3' or (
+        title like '%' || :keyword || '%' or
+        contents like '%' || :keyword || '%'
+      ))
+    ]]>
+    </query>
+  </named-query>
+  <named-query name="Article.getMaxNumber">
+    <query>
+    <![CDATA[
+    select max(case when n is null then 0 else n end) as max from (
+      select
+        cast(max(num) as int) as n
+      from Article a
+      where boardId = :boardId
+      union
+      select
+        cast(count(num) as int) as n
+      from Article b
+      where boardId = :boardId
+    ) a
+    ]]>
+    </query>
+  </named-query>
+  <!-- SQL 질의 -->
+  <named-native-query name="Article.searchArticlesUsingNative" result-set-mapping="Article">
+    <query>
+    <![CDATA[
+    SELECT
+      *
+    FROM
+      TB_ARTICLE
+    WHERE
+      (:searchType IS NOT NULL OR TRUE) AND
+      (:searchType != '1' OR TITLE LIKE '%' || :keyword || '%') AND
+      (:searchType != '2' OR CONTENTS LIKE '%' || :keyword || '%') AND
+      (:searchType != '3' OR (
+        TITLE LIKE '%' || :keyword || '%' OR
+        CONTENTS LIKE '%' || :keyword || '%'
+      ))
+    ]]>
+    </query>
+  </named-native-query>
+  <sql-result-set-mapping name="Article">
+    <entity-result entity-class="my.was.mywas.works.atc.Article"/>
+  </sql-result-set-mapping>
+</entity-mappings>

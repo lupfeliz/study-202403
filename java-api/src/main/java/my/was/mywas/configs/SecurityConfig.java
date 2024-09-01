@@ -7,6 +7,9 @@
  **/
 package my.was.mywas.configs;
 
+import static my.was.mywas.commons.Constants.TOK_TYP_ACC;
+import static my.was.mywas.commons.WebUtils.getAuthToken;
+
 import static org.springframework.http.HttpMethod.GET;
 import static org.springframework.http.HttpMethod.POST;
 import static org.springframework.http.HttpMethod.PUT;
@@ -25,7 +28,9 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandler;
@@ -39,6 +44,7 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import org.springframework.web.filter.GenericFilterBean;
 
+import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.ServletRequest;
@@ -46,6 +52,7 @@ import jakarta.servlet.ServletResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
+import my.was.mywas.commons.TokenProvider;
 
 @Slf4j @Configuration
 @EnableWebSecurity @EnableMethodSecurity 
@@ -153,13 +160,20 @@ public class SecurityConfig {
   }
 
   @Component public static class AuthFilter extends GenericFilterBean {
+    /** 토큰발급기 */
+    @Autowired TokenProvider tokenProvider;
     @Override public void doFilter(ServletRequest sreq, ServletResponse sres, FilterChain chain)
       throws IOException, ServletException {
-      /** 추후 Response 객체를 Request 에서 읽어올 수 있도록 저장 */
       HttpServletRequest req = (HttpServletRequest) sreq;
       req.setAttribute(HttpServletResponse.class.getName(), sres);
-      /** TODO: 토큰유무 및 인증정보 확인 */
-      log.debug("TODO: 토큰유무 및 인증정보 확인");
+      String token = getAuthToken(req);
+      log.trace("TOKEN:{}", token);
+      Claims claims = null;
+      /** 토큰이 정상검증되면 인증정보를 현재 컨텍스트(리퀘스트) 에 저장한다. */
+      if (token != null && (claims = tokenProvider.parseToken(TOK_TYP_ACC, token, req)) != null) {
+        Authentication auth = tokenProvider.getAuth(claims);
+        SecurityContextHolder.getContext().setAuthentication(auth);
+      }
       chain.doFilter(sreq, sres);
     }
   }
