@@ -276,15 +276,20 @@ const app = {
     if (appvars.astate == C.APPSTATE_INIT) {
       appvars.astate = C.APPSTATE_START
       try {
+        const api = (await import('@/libs/api')).default
         const crypto = (await import('@/libs/crypto')).default
+        const userContext = (await import('@/libs/user-context')).default
         const conf = decryptAES(encrypted(), C.CRYPTO_KEY)
         app.putAll(appvars.config, conf)
         log.setLevel(conf.log.level)
         log.debug('CONF:', conf)
+        const cres = await api.get(`cmn01001`, {})
         await crypto.rsa.init(app.getConfig().security.key.rsa, C.PRIVATE_KEY)
-        /** TODO: AES 암호화 정보 초기화 */
+        const aeskey = crypto.rsa.decrypt(cres?.check || '')
+        await crypto.aes.init(aeskey)
         appvars.astate = C.APPSTATE_ENV
-        /** TODO: 사용자 정보 초기화 */
+        const userInfo = userContext.getUserInfo()
+        if (userInfo?.userId && (userInfo.accessToken?.expireTime || 0) > new Date().getTime()) { userContext.checkExpire() }
         appvars.astate = C.APPSTATE_USER
       } catch (e) {
         appvars.astate = C.APPSTATE_ERROR

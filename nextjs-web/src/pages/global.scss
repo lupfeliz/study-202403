@@ -5,7 +5,7 @@
  * @Description : 전역 스타일시트
  * @Site        : https://devlog.ntiple.com/795
  **/
-html {
+ html {
   body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
@@ -24,6 +24,28 @@ html {
         padding-top: 1rem;
         padding-bottom: 1rem;
         border-bottom: 1px solid #ccc;
+        align-items: center;
+
+        > div:nth-child(1) {
+          width: 64px;
+        }
+        > div:nth-child(2) {
+          width: calc(100% - 4rem)
+        }
+        > div:nth-child(3) {
+          width: 64px;
+        }
+      }
+    }
+
+    .header-aside > .MuiPaper-root {
+      width: 30%;
+      max-width: 10rem;
+      padding-top: 1rem;
+      > div {
+        > .MuiButtonBase-root {
+          width: 100%;
+        }
       }
     }
 
@@ -54,6 +76,23 @@ html {
         border-top: 1px solid #ccc;
       }
     }
+
+    /** sticky 기능을 위해 css변수를 사용 */
+    footer :root {
+      --screen-height: 100dvh;
+      --scroll-top: 0;
+      --footer-height: calc(3rem + 1.2rem + 2px)
+    }
+
+    footer.sticky {
+      position: absolute;
+      top: calc(var(--screen-height) + var(--scroll-top) - var(--footer-height))
+    }
+
+    footer.hide {
+      opacity: 0;
+      transform: translateY(0.5rem) 
+    }
   }
 }
 
@@ -63,6 +102,124 @@ section.title {
   align-items: center;
 }
 
+section.flex-form {
+  display: flex;
+  justify-content: center;
+  form {
+    width: calc(60vw + 1rem + 4rem + 32px);
+    article {
+      hr {
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+      }
+      div.form-block {
+        margin-bottom: 0.5rem;
+        > label[for] {
+          display: flex;
+          align-items: center;
+          justify-content: left;
+          width: 7rem;
+          margin-top: 0.25rem;
+          margin-bottom: 0.25rem;
+        }
+
+        > label[for] + div.form-element {
+          // width: calc(60vw);
+          width: 100%;
+          margin-right: 0.5rem;
+        }
+
+        > label[for] + div.form-element.user-id {
+          > div:nth-child(1) {
+            width: calc(100% - 5rem - 0.5rem - 10px);
+            margin-right: 0.5rem;
+          }
+          > div:nth-child(2) {
+            width: calc(5rem);
+          }
+        }
+
+        > label[for] + div.form-element.email {
+          > div:nth-child(1) {
+            width: calc(50% - 1rem);
+          }
+          > span:nth-child(2) {
+            display: inline-block;
+            width: 2rem;
+            padding-top: 0.5rem;
+            text-align: center;
+          }
+          > div:nth-child(3) {
+            width: calc(50% - 1rem);
+          }
+        }
+
+        > label[for] + div.form-element.editor {
+          > div > div[contenteditable] {
+            border: 1px solid #ccc;
+            border-radius: 0.2rem;
+            padding: 0.5rem;
+            height: 10rem;
+            overflow-y: auto;
+          }
+        }
+
+        > label[for] + div.form-element + button {
+          width: calc(4rem + 32px);
+        }
+      }
+      > .buttons {
+        display: flex;
+        justify-content: center;
+      }
+    }
+  }
+}
+
+.tiptap > p:first-child {
+  margin-top: 0;
+}
+
+.MuiInputBase-root > input + fieldset > legend {
+  display: none;
+}
+
+hr {
+  border-top: 1px solid #ccc;
+  border-bottom: 0;
+}
+
+table.articles {
+  > thead {
+    > tr {
+      > th {
+        border-left: 1px solid #ccc;
+      }
+      > th:first-child {
+        border-left: none;
+      }
+    }
+  }
+  > tbody {
+    > tr {
+      > td {
+        padding: 0.5rem;
+      }
+      > td.nopad {
+        padding: 0;
+      }
+    }
+  }
+}
+
+/** 좌우 폭이 너무 넓어지는것을 방지 */
+@media (min-width:800px) {
+  section, hr {
+    max-width: 800px;
+  }
+}
+
+/** 이하 tailwind 에서 일부 내용을 차용해서 util css 로 사용 */
 .mx-1 {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
