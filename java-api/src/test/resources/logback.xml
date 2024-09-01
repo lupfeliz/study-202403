@@ -1,0 +1,17 @@
+<!-- 
+@File        : logback.xml
+@Author      : 정재백
+@Since       : 2024-04-16 
+@Description : 테스트용 로그설정
+@Site        : https://devlog.ntiple.com/795
+-->
+<configuration scan="true" scanPeriod="10 seconds">
+  <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>[%date %level] \(%file:%line\) %msg%n</pattern>
+    </encoder>
+  </appender>
+  <root level="debug">
+    <appender-ref ref="STDOUT" />
+  </root>
+</configuration>

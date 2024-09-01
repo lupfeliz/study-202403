@@ -1,0 +1,84 @@
+## @File        : application.yml
+## @Author      : 정재백
+## @Since       : 2024-04-16 
+## @Description : 환경설정파일
+## @Site        : https://devlog.ntiple.com/795
+
+debug: false
+server:
+  port: 8080
+  forward-headers-strategy: FRAMEWORK
+spring:
+  application:
+    name: demo
+  mvc:
+    static-path-pattern: "/**"
+  web:
+    resources:
+      static-locations: "classpath:/static/"
+  servlet:
+    multipart:
+      maxFileSize: "1GB"
+      maxRequestSize: "1GB"
+  datasource:
+    driverClassName: org.h2.Driver
+    ##  메모리 전용 DB 사용시 아래 설정 사용
+    # url: jdbc:h2:mem:test
+    url: jdbc:h2:./demo-app.db
+    username: sa
+    password: 
+  jpa:
+    defer-datasource-initialization: true 
+    generate-ddl: true
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: ""
+        ddl-auto: update
+        format-sql: false
+    mapping-resources:
+  ## H2 Console 설정
+  h2:
+    console:
+      enabled: true
+      path: /h2-console
+      settings:
+        web-allow-others: true
+
+security:
+  jwt:
+    ## 액세스토큰
+    access:
+      algorhithm: HmacSHA512
+      ## 액세스토큰 발급용 키 (TODO: 추후 keygen 사용)
+      secret: "t28wa4Pak6PAuQ1Ps2ycKRoBROybGBFzzqki3zGjk6TgTFhPutuQB3nSosLuIw4Yyuv7eSAdCfTVz0kfYi+Myw=="
+      ## 1000 * 60 * 30 = 30분
+      expire: 1802000
+    ## 리프레시토큰
+    refresh:
+      algorhithm: HmacSHA512
+      ## 리프레시토큰 발급용 키 (TODO: 추후 keygen 사용)
+      secret: "v1MzR2oTSvn7Gio5TkUO/rd2teJlwkRUWh0mlkBrPLlxBso/U6ZOSz4Y5QMGa23aIB66ykZIqn1DFJodhPwB1w=="
+      ## 1000 * 60 * 60 * 24 = 1일
+      expire: 86402000
+  key:
+    aes:
+      secret: "Fce2YOFk/TVcJfAFVZqnL9SWHfkxQEA47g0nk2GxpMM="
+    rsa:
+      privatekey: "MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAMhfVP50PfMYry6YsMYpEdTPjWRHflvUNDhzhrgyO5gEiTIj2lK6S95XRggsU/NGTbRqRouBmFlV4+KHL9LLKhXszqlDRDWf1jZJBNdI4/GpRlQU/MkByji+2lv9894gJPXpExDLO/bM+PTZ16HMAMyZJ6DNw5hD/GMEudZk6U1lAgMBAAECgYAD/17nOrN3s6DfGZ3BPlWEPOXRv9lmBJxMGgXwi9QDiuefz/ZNmzjjRTN4+0Vrf5YSSOKCawH6mkuTG+ZY2sPKpiIBSX4SXewMIKRhbxOj19iwrNp1gBDK3s/kpHy9+x8b7tuEIITNYreuadYAvVgSMlaJVPdh7uUm39sMnn/aqwJBANRWQBpaOfw3iQ+g7jBrBJz+e5QbmsNZeNUPrk9WbMuhKQkLUP2E4U5noFKV8SZFGo48YPKsC32DxFF3e8kw2fsCQQDxk0ALLlepzdpqVkm6YQ4KtTEweug+L/RdjU5apGZLZI+AGfYIE1JIzyzgdPke92ePnw1wPqFgi0PyzyJn8DgfAkAq5M2IRUfHapSWgqT7RPMmn8XpEnZ+Ffnx2HwW7NeHfyPh/tY6kHhPNWHOrRmM6JLHvuy6uQSNM2waJO/toZ+3AkEAo4WzUl46RNztPhHOsnTEFod0Fob78ixv02u1YDHsdJhLcsEgA3NgvZxPmlhT0ZxS46scY6BhiIJ8qj1/4q9+rQJAbZj4vsQB5SrKcYNR8VVYMP9EYXnFax66QgSjGI3zPJhjAcbdyhDVshFKHcsI3R1dxegLFTbvjYKejzWfHBcBUQ=="
+      publickey: "MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDIX1T+dD3zGK8umLDGKRHUz41kR35b1DQ4c4a4MjuYBIkyI9pSukveV0YILFPzRk20akaLgZhZVePihy/SyyoV7M6pQ0Q1n9Y2SQTXSOPxqUZUFPzJAco4vtpb/fPeICT16RMQyzv2zPj02dehzADMmSegzcOYQ/xjBLnWZOlNZQIDAQAB"
+
+## OPEN-API 설정
+springdoc:
+  packages-to-scan: my.was.mywas
+  default-consumes-media-type: application/json; charset=UTF-8
+  default-produces-media-type: application/json; charset=UTF-8
+  swagger-ui:
+    path: /swagger/
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha
+
+logging:
+  level:
+    org.springframework.boot: INFO
