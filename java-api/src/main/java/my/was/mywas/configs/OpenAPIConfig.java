@@ -24,7 +24,7 @@ import io.swagger.v3.oas.models.servers.Server;
 
 @OpenAPIDefinition
 @Configuration public class OpenAPIConfig {
-  @Value("${springdoc.server.url|/}") private String svurl;
+  @Value("${springdoc.server.url:/}") private String svurl;
   @Value("${springdoc.server.description:기본URL}") private String description;
   @Bean public OpenAPI customOpenAPI() {
     final String secureScheme = "인증전송자(Bearer)";
