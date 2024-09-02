@@ -7,22 +7,34 @@
  **/
 package my.was.mywas.configs;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
-import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 
-@OpenAPIDefinition(servers = { @Server(url = "/", description = "기본URL") })
+@OpenAPIDefinition
 @Configuration public class OpenAPIConfig {
+  @Value("${springdoc.server.url|/}") private String svurl;
+  @Value("${springdoc.server.description:기본URL}") private String description;
   @Bean public OpenAPI customOpenAPI() {
     final String secureScheme = "인증전송자(Bearer)";
+    List<Server> servers = new ArrayList<>();
+    Server server = new Server();
+    server.setUrl(svurl);
+    server.setDescription(description);
+    servers.add(server);
     return new OpenAPI()
+      .servers(servers)
       .addSecurityItem(new SecurityRequirement().addList(secureScheme))
       .components(new Components()
         .addSecuritySchemes(secureScheme, new SecurityScheme()
