@@ -206,9 +206,7 @@ const app = {
       }
     })
   },
-  sleep(time: number) {
-    return new Promise(r => setTimeout(r, time))
-  },
+  sleep(time: number) { return new Promise(r => setTimeout(r, time)) },
   /** react 페이지 선언 */
   definePage<A, B, C extends A & B>(compo?: A, _opts?: B) {
     let ret = C.UNDEFINED
@@ -271,14 +269,19 @@ const app = {
   },
   /** APP 최초 구동시 수행되는 프로세스 */
   async onload(props: AppProps) {
+    const router = appvars.router = props.router
+    const base = String(router.basePath)
+    const curl = String(history.state.url).substring(base.length)
+    const hurl = String(history.state.as)
     const $body = $(document.body)
-    appvars.router = props.router
     if (appvars.astate == C.APPSTATE_INIT) {
       appvars.astate = C.APPSTATE_START
       try {
         const api = (await import('@/libs/api')).default
         const crypto = (await import('@/libs/crypto')).default
         const userContext = (await import('@/libs/user-context')).default
+        /** 웹컨테이너에서 SPA 페이지를 다이렉트로 접근할 때 URL 보정 */
+        if (curl === '/?' && hurl !== '/') { await appvars.router.push(hurl, hurl, {}) }
         const conf = decryptAES(encrypted(), C.CRYPTO_KEY)
         app.putAll(appvars.config, conf)
         log.setLevel(conf.log.level)
